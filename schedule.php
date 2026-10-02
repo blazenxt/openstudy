@@ -1,0 +1,9 @@
+<?php
+require __DIR__ . '/lib.php';
+$state=get_state(); $items=schedule_items($state); $t=progress_totals($state);
+page_header('Weekly schedule','plan','Weekly schedule');
+?>
+<div class="hero"><div><div class="eyebrow">Your rhythm</div><h1>One week, one step at a time.</h1><p>Choose seven manageable sessions. Tick them off as you go; the plan is saved privately in this browser.</p></div><div class="date-pill">Completed this week · <span><?=count(array_filter($items,fn($x)=>!empty($x['done']))).' / '.count($items)?></span></div></div>
+<?php if(isset($_GET['saved'])) notice('Your weekly schedule has been saved.','success'); ?>
+<div class="workspace"><div class="chapter-panel"><div class="chapter-header"><h2>Study targets</h2><span>Free resources only</span></div><form class="schedule-form" action="progress.php" method="post" style="padding:18px"><input type="hidden" name="action" value="save_schedule"><?php foreach($items as $i=>$item): ?><label class="schedule-item <?=!empty($item['done'])?'done':''?>" style="display:flex;align-items:center;gap:12px"><input type="checkbox" name="done[<?=$i?>]" value="1" <?=!empty($item['done'])?'checked':''?>><span class="day-dot"><?=e($item['day'])?></span><span class="schedule-title"><?=e($item['title'])?><span class="schedule-sub"><?=e($item['sub'])?></span></span></label><?php endforeach; ?><div class="schedule-actions"><a class="outline-btn" href="index.php">Cancel</a><button class="primary-btn" type="submit">Save schedule</button></div></form></div><section class="schedule-card"><h2>Study reminder</h2><p>A good default session is simple:</p><div class="resource-box"><div class="resource-kicker">The three-part loop</div><h3>Lecture → Notes → DPP</h3><p>Watch a free public lecture, read the NCERT source, then answer the practice questions before moving on.</p></div><div class="source-line">Progress is stored in your browser-specific study file.</div></section></div>
+<?php page_footer(); ?>
